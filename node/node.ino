@@ -1,3 +1,5 @@
+#include <ArduinoJson.h>
+
 // Feather9x_TX
 // -*- mode: C++ -*-
 // Example sketch showing how to create a simple messaging client (transmitter)
@@ -16,6 +18,8 @@
 #define RFM95_INT 3
 
 #define RF95_FREQ 915.0
+
+#define LED 13
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -68,8 +72,7 @@ void setup()
   rf95.setTxPower(23, false);
 }
 
-void loop()
-{
+void loop() {
   val = digitalRead(inPin);  // read input value
 
   if (val == HIGH && state == true) {         // check if the input is HIGH (button released)
@@ -80,17 +83,45 @@ void loop()
 
     state = false;
   }
+  
+  if (rf95.available()) {
+    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
+    uint8_t len = sizeof(buf);
+    
+    if (rf95.recv(buf, &len)){
+      digitalWrite(LED, HIGH);
+      RH_RF95::printBuffer("Received: ", buf, len);
+      Serial.print("Got: ");
+      String message = (char *)buf;
+      Serial.println(message);
+      Serial.print("RSSI: ");
+      Serial.println(rf95.lastRssi(), DEC);
+    } else {
+      Serial.println("Receive failed");
+    }
+  }
 
   if (val == LOW) {
     state = true;
   }
-
+  
+//  if (rf95.available()) {
+//    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
+//    uint8_t len = sizeof(buf);
+//      digitalWrite(LED, HIGH);
+//      RH_RF95::printBuffer("Received: ", buf, len);
+//      Serial.print("Got: ");
+//      String message = (char *)buf;
+//      Serial.println(message);
+//      Serial.print("RSSI: ");
+//      Serial.println(rf95.lastRssi(), DEC);
+//  }
 }
 
 void sendData() {
 
   StaticJsonDocument<200> doc;
-  doc["id"] = "Radio 1";
+  doc["id"] = "Radio 2";
   doc["temp"] = getTemp();
 
   char payload[300];
@@ -107,10 +138,13 @@ void sendData() {
 }
 
 int getTemp() {
-
+  /*
   int reading = analogRead(tempuraturePin);
   float voltage = reading * 3.3;
   voltage /= 1024.0;
   int temperatureC = (voltage - 0.5) * 100 ;
   return temperatureC;
+  */
+
+  return 6;
 }
