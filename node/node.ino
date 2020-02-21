@@ -29,6 +29,7 @@ int tempuraturePin = 1;
 int inPin = 5;   // choose the input pin (for a pushbutton)
 int val = 0;     // variable for reading the pin status
 boolean state = true;
+int id_last_sent = 0;
 
 void setup()
 {
@@ -83,20 +84,28 @@ void loop() {
 
     state = false;
   }
-  
+
   if (rf95.available()) {
     uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
-    
-    if (rf95.recv(buf, &len)){
+
+    for (int i = 0; i < RH_RF95_MAX_MESSAGE_LEN; i++) {
+      buf[i] = 0;
+    }
+
+    if (rf95.recv(buf, &len)) {
       digitalWrite(LED, HIGH);
       RH_RF95::printBuffer("Received: ", buf, len);
       Serial.print("Got: ");
-      Serial.println((char*)buf);
+      char* message = (char*) buf;
+      Serial.println(message);
       Serial.print("RSSI: ");
       Serial.println(rf95.lastRssi(), DEC);
 
       //Send to other nodes
+      StaticJsonDocument<256> jsonBuffer;
+      JsonVariant json_message = jsonBuffer.parse(message);
+      Serial.println(json_message["message_id"]);
     } else {
       Serial.println("Receive failed");
     }
@@ -116,15 +125,11 @@ void sendData() {
 
   char payload[RH_RF95_MAX_MESSAGE_LEN];
 
-  for (int i = 0; i < RH_RF95_MAX_MESSAGE_LEN; i++) {
-    payload[i] = '\0';
-  }
-  
   serializeJson(doc, payload);
 
   Serial.println("Sending...");
   Serial.println(payload);
-  
+
   delay(50);
   rf95.send((uint8_t *)payload, strlen(payload));
 
@@ -135,11 +140,11 @@ void sendData() {
 
 int getTemp() {
   /*
-  int reading = analogRead(tempuraturePin);
-  float voltage = reading * 3.3;
-  voltage /= 1024.0;
-  int temperatureC = (voltage - 0.5) * 100 ;
-  return temperatureC;
+    int reading = analogRead(tempuraturePin);
+    float voltage = reading * 3.3;
+    voltage /= 1024.0;
+    int temperatureC = (voltage - 0.5) * 100 ;
+    return temperatureC;
   */
 
   return 6;
