@@ -95,6 +95,8 @@ void loop() {
       Serial.println((char*)buf);
       Serial.print("RSSI: ");
       Serial.println(rf95.lastRssi(), DEC);
+
+      //Send to other nodes
     } else {
       Serial.println("Receive failed");
     }
@@ -110,6 +112,7 @@ void sendData() {
   StaticJsonDocument<200> doc;
   doc["id"] = BOARD_ID;
   doc["temp"] = getTemp();
+  doc["message_id"] = random(1281998);
 
   char payload[RH_RF95_MAX_MESSAGE_LEN];
 
