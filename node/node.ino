@@ -75,10 +75,9 @@ void setup()
 void loop() {
   val = digitalRead(inPin);  // read input value
 
-  if (val == HIGH && state == true) {         // check if the input is HIGH (button released)
+  if (val == HIGH && state == true) { // check if the input is HIGH (button released)
     Serial.println("Button pressed");
-    Serial.println("Transmitting..."); // Send a message to rf95_server
-
+    Serial.println("Transmitting...");
     sendData();
 
     state = false;
@@ -92,8 +91,7 @@ void loop() {
       digitalWrite(LED, HIGH);
       RH_RF95::printBuffer("Received: ", buf, len);
       Serial.print("Got: ");
-      String message = (char *)buf;
-      Serial.println(message);
+      Serial.println((char*)buf);
       Serial.print("RSSI: ");
       Serial.println(rf95.lastRssi(), DEC);
     } else {
@@ -104,18 +102,6 @@ void loop() {
   if (val == LOW) {
     state = true;
   }
-  
-//  if (rf95.available()) {
-//    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
-//    uint8_t len = sizeof(buf);
-//      digitalWrite(LED, HIGH);
-//      RH_RF95::printBuffer("Received: ", buf, len);
-//      Serial.print("Got: ");
-//      String message = (char *)buf;
-//      Serial.println(message);
-//      Serial.print("RSSI: ");
-//      Serial.println(rf95.lastRssi(), DEC);
-//  }
 }
 
 void sendData() {
@@ -124,11 +110,17 @@ void sendData() {
   doc["id"] = "Radio 2";
   doc["temp"] = getTemp();
 
-  char payload[300];
+  char payload[RH_RF95_MAX_MESSAGE_LEN];
+
+  for (int i = 0; i < RH_RF95_MAX_MESSAGE_LEN; i++) {
+    payload[i] = '\0';
+  }
+  
   serializeJson(doc, payload);
 
   Serial.println("Sending...");
   Serial.println(payload);
+  
   delay(50);
   rf95.send((uint8_t *)payload, strlen(payload));
 
