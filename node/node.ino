@@ -16,10 +16,11 @@
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
-
 #define RF95_FREQ 915.0
-
 #define LED 13
+#define BOARD_ID 1
+
+
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -107,7 +108,7 @@ void loop() {
 void sendData() {
 
   StaticJsonDocument<200> doc;
-  doc["id"] = "Radio 2";
+  doc["id"] = BOARD_ID;
   doc["temp"] = getTemp();
 
   char payload[RH_RF95_MAX_MESSAGE_LEN];
