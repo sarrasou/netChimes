@@ -103,9 +103,6 @@ void loop() {
       Serial.println(rf95.lastRssi(), DEC);
 
       //Send to other nodes
-      StaticJsonDocument<256> jsonBuffer;
-      JsonVariant json_message = jsonBuffer.parse(message);
-      Serial.println(json_message["message_id"]);
     } else {
       Serial.println("Receive failed");
     }
