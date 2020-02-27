@@ -18,7 +18,8 @@
 #define RFM95_INT 3
 #define RF95_FREQ 915.0
 #define LED 13
-#define BOARD_ID 1
+//change back to 1
+#define BOARD_ID 2
 
 
 

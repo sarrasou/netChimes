@@ -13,6 +13,7 @@
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 3
+#define BOARD_ID 0
 
 
 // Change to 434.0 or other frequency, must match RX's freq!
@@ -26,7 +27,6 @@ RH_RF95 rf95(RFM95_CS, RFM95_INT);
 
 void setup()
 {
-  pinMode(LED, OUTPUT);
   pinMode(RFM95_RST, OUTPUT);
   digitalWrite(RFM95_RST, HIGH);
 
@@ -73,6 +73,9 @@ void loop()
     // Should be a message for us now
     uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(buf);
+    for (int i = 0; i <= RH_RF95_MAX_MESSAGE_LEN; i++) {
+      buf[i] = 0;
+    }
 
     if (rf95.recv(buf, &len))
     {
@@ -83,12 +86,6 @@ void loop()
        Serial.print("RSSI: ");
       Serial.println(rf95.lastRssi(), DEC);
 
-      // Send a reply
-      uint8_t data[] = "And hello back to you";
-      rf95.send(data, sizeof(data));
-      rf95.waitPacketSent();
-      Serial.println("Sent a reply");
-      digitalWrite(LED, LOW);
     }
     else
     {
