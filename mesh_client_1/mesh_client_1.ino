@@ -51,7 +51,7 @@ void sendData() {
   uint8_t data [] = {client_id, temp, humidity, light};
 
   Serial.println("Button pressed");
-  Serial.println("Sending to SERVER_ADDRESS");
+  Serial.println("Sending to SERVER");
 
   if (manager.sendtoWait(data, sizeof(data), SERVER_ADDRESS) == RH_ROUTER_ERROR_NONE) {
     Serial.println("Data sent");
