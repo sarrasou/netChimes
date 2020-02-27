@@ -1,12 +1,3 @@
-// rf22_mesh_server1.pde
-// -*- mode: C++ -*-
-// Example sketch showing how to create a simple addressed, routed reliable messaging server
-// with the RHMesh class.
-// It is designed to work with the other examples rf22_mesh_*
-// Hint: you can simulate other network topologies by setting the 
-// RH_TEST_NETWORK define in RHRouter.h
-// Mesh has much greater memory requirements, and you may need to limit the
-// max message length to prevent wierd crashes
 #include <RHRouter.h>
 #include <RHMesh.h>
 #include <RH_RF95.h>
@@ -44,19 +35,19 @@ void setup()
     
 }
 
-uint8_t data[] = "And hello back to you from server1";
-// Dont put this on the stack:
-uint8_t buf[RH_MESH_MAX_MESSAGE_LEN];
 void loop()
 {
   uint8_t len = sizeof(buf);
   uint8_t from;
   if (manager.recvfromAck(buf, &len, &from))
   {
-    Serial.print("got request from : 0x");
-    Serial.print("Temperature: ");
+    Serial.print("got message from : ");
     Serial.println(buf[0]);
-    Serial.print("Humidity: ");
+    Serial.print("Tempurature: ");
     Serial.println(buf[1]);
+    Serial.print("Humidity: ");
+    Serial.println(buf[2]);
+    Serial.print("Light intensity: ");
+    Serial.println(buf[3]);
   }
 }
