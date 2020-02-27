@@ -54,8 +54,9 @@ void loop()
   if (manager.recvfromAck(buf, &len, &from))
   {
     Serial.print("got request from : 0x");
-    Serial.print(from, HEX);
-    Serial.print(": ");
-    Serial.println((char*)buf);
+    Serial.print("Temperature: ");
+    Serial.println(buf[0]);
+    Serial.print("Humidity: ");
+    Serial.println(buf[1]);
   }
 }
