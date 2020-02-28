@@ -68,10 +68,10 @@ void loop()
 
 void jsonifyReceivedData(uint8_t * buf) {
   StaticJsonDocument<200> doc;
-  doc["id"] = (char*)buf[0];
-  doc["temp"] = (char*)buf[1];
-  doc["humi"] = (char*)buf[2];
-  doc["light"] = (char*)buf[3];
+  doc["id"] = buf[0];
+  doc["temp"] = buf[1];
+  doc["humi"] = buf[2];
+  doc["light"] = buf[3];
 
   char payload[500];
 
