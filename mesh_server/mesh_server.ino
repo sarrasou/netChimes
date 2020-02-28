@@ -81,6 +81,8 @@ void jsonifyReceivedData(uint8_t * buf) {
 
   serializeJson(doc, payload);
 
-  Serial.print(payload);
+  Serial.write(payload, 500);
+
+  //Serial.print(payload);
 
 }
