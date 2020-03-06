@@ -53,15 +53,6 @@ void loop()
   uint8_t from;
   if (manager.recvfromAck(buf, &len, &from))
   {
-//    Serial.print("got message from :");
-//    Serial.println(buf[0]);
-//    Serial.print("Tempurature: ");
-//    Serial.println(buf[1]);
-//    Serial.print("Humidity: ");
-//    Serial.println(buf[2]);
-//    Serial.print("Light intensity: ");
-//    Serial.println(buf[3]);
-
     jsonifyReceivedData(buf);
   }
 }
@@ -81,8 +72,8 @@ void jsonifyReceivedData(uint8_t * buf) {
 
   serializeJson(doc, payload);
 
-  Serial.write(payload, 500);
+//  Serial.write(payload, 500);
 
-  //Serial.print(payload);
+  Serial.println(payload);
 
 }
