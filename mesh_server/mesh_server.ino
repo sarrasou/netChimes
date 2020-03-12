@@ -29,7 +29,8 @@ RHMesh manager(rf95, SERVER_ADDRESS);
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
+  Serial1.begin(9600);
   while (!Serial) ; // Wait for serial port to be available
 
   if (!manager.init()) {
@@ -75,5 +76,6 @@ void jsonifyReceivedData(uint8_t * buf) {
 //  Serial.write(payload, 500);
 
   Serial.println(payload);
+  Serial1.println(payload);
 
 }

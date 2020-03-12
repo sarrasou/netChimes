@@ -5,8 +5,8 @@
 #include <Adafruit_SSD1306.h>
 #include <PubSubClient.h>
 
-const char* ssid = "UB_Connect";
-const char* password = "";
+const char* ssid = "NETGEAR17";
+const char* password = "helpfulrosebud551";
 const char* mqtt_server = "mqtt.eclipse.org";
 int mqtt_port = 1883;
 const char* dataTopic = "mesh_gateway/data";
@@ -40,6 +40,7 @@ void setup()   {
   digitalWrite(2, HIGH);
 
   Serial.begin(9600);
+  Serial1.begin(9600);
   while (!Serial);
 
   log("Connecting to ");
@@ -73,8 +74,8 @@ void loop() {
 
   delay(50); // Give the ESP time to handle network.
 
-  if (Serial.available()) {
-    Serial.setTimeout(100);
+  if (Serial1.available() >0) {
+//    Serial.setTimeout(100);
     String s = Serial.readStringUntil('\n');
     Serial.println(s);
     char * data = s.c_str;
